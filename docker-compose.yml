@@ -2,7 +2,7 @@
 version: '3'
 services:
   bareos-dir:
-    image: barcus/bareos-director:alpine #BareOS17.2 + mysql
+    image: barcus/bareos-director:alpine #BareOS18.2 + mysql
     volumes:
       - /home/bareos/data/director:/var/lib/bareos # required for MyCatalog backup
     environment:

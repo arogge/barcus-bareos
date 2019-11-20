@@ -1,9 +1,9 @@
 ## docker-compose BareOS Director/Storage/Client/webUI, PHP-FPM and MySQL Database
-version: '3.2'
+version: '3.7'
 services:
   bareos-dir:
     #image: barcus/bareos-director:latest
-    image: barcus/bareos-director:17.2-mysql-alpine #(lastest director+mysql)
+    image: barcus/bareos-director:18.2-mysql-alpine #(lastest director+mysql)
     volumes:
       - director_config:/etc/bareos
       - director_data:/var/lib/bareos #(required for MyCatalog backup)
@@ -22,7 +22,7 @@ services:
       - bareos-db
 
   bareos-sd:
-    image: barcus/bareos-storage:alpine
+    image: barcus/bareos-storage:18.2-alpine
     ports:
       - 9103:9103
     volumes:
@@ -32,7 +32,7 @@ services:
       - BAREOS_SD_PASSWORD=ThisIsMySecretSDp4ssw0rd
 
   bareos-fd:
-    image: barcus/bareos-client:alpine
+    image: barcus/bareos-client:18.2-alpine
     volumes:
       - client_config:/etc/bareos
       - director_data:/var/lib/bareos-director #(required for MyCatalog backup)
@@ -40,7 +40,7 @@ services:
       - BAREOS_FD_PASSWORD=ThisIsMySecretFDp4ssw0rd
 
   bareos-webui:
-    image: barcus/bareos-webui:alpine
+    image: barcus/bareos-webui:18.2-alpine
     ports:
       - 8080:9100
     environment:
@@ -48,7 +48,7 @@ services:
       - PHP_FPM_HOST=php-fpm
       - PHP_FPM_PORT=9000
     volumes:
-      - webuiconfig:/etc/bareos-webui
+      - webui_config:/etc/bareos-webui
       - webui_data:/usr/share/bareos-webui
     depends_on:
       - php-fpm
@@ -73,41 +73,49 @@ volumes:
   director_config:
     driver: local
     driver_opts:
+      type: none
       o: 'bind'
-      device: '/home/bareos/config/director'
+      device: '/data/bareos/config/director'
   director_data:
     driver: local
     driver_opts:
+      type: none
       o: 'bind'
-      device: '/home/bareos/data/director'
+      device: '/data/bareos/data/director'
   storage_config:
     driver: local
     driver_opts:
+      type: none
       o: 'bind'
-      device: '/home/bareos/config/storage'
+      device: '/data/bareos/config/storage'
   storage_data:
     driver: local
     driver_opts:
+      type: none
       o: 'bind'
-      device: '/home/bareos/data/storage'
+      device: '/data/bareos/data/storage'
   client_config:
     driver: local
     driver_opts:
+      type: none
       o: 'bind'
-      device: '/home/bareos/config/client'
+      device: '/data/bareos/config/client'
   webui_config:
     driver: local
     driver_opts:
+      type: none
       o: 'bind'
-      device: '/home/bareos/config/webui'
+      device: '/data/bareos/config/webui'
   webui_data:
     driver: local
     driver_opts:
+      type: none
       o: 'bind'
-      device: '/home/bareos/data/webui'
+      device: '/data/bareos/data/webui'
   mysql_data:
     driver: local
     driver_opts:
+      type: none
       o: 'bind'
-        device: '/home/mysql/data'
+      device: '/data/mysql/data'
 #EOF
